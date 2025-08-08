@@ -1,6 +1,7 @@
 const bookmarkList = [];
 const addBookForm = document.getElementById("addBookForm");
 
+/* OLD CLASS
 function Book(bookID, title, author, pages, year, haveRead) {
 	this.bookID = bookID;
 	this.title = title;
@@ -22,6 +23,37 @@ function Book(bookID, title, author, pages, year, haveRead) {
 		this.haveRead = toggleValue;
 		populateBookmarkList(bookmarkList);
 	};
+} 
+*/
+
+// New Class
+class Book {
+	#bookID;
+
+	constructor(bookID, title, author, pages, year, haveRead) {
+		this.#bookID = bookID;
+		this.title = title;
+		this.author = author;
+		this.pages = pages;
+		this.year = year;
+		this.haveRead = haveRead;
+	}
+
+	get bookID() {
+		return this.#bookID;
+	}
+
+	deleteBookmark(bookIndexToDelete) {
+		if (bookIndexToDelete !== -1) {
+			bookmarkList.splice(bookIndexToDelete, 1);
+			populateBookmarkList(bookmarkList);
+		}
+	}
+
+	updateHaveReadValue(toggleValue) {
+		this.haveRead = toggleValue;
+		populateBookmarkList(bookmarkList);
+	}
 }
 
 function populateBookmarkList(bookmarkList) {
