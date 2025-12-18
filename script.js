@@ -1,5 +1,7 @@
 const bookmarkList = [];
 const addBookForm = document.getElementById("addBookForm");
+const { bookName, bookAuthor, bookPages, bookYear, haveReadToggle } =
+	addBookForm.elements;
 
 /* OLD CLASS
 function Book(bookID, title, author, pages, year, haveRead) {
@@ -55,6 +57,32 @@ class Book {
 		populateBookmarkList(bookmarkList);
 	}
 }
+
+addBookForm.addEventListener("submit", (e) => addBooktoLibrary(e));
+
+bookName.addEventListener("input", () => {
+	if (bookName.validity.valueMissing) {
+		bookName.setCustomValidity("Book title cannot be empty");
+	} else {
+		bookName.setCustomValidity("");
+	}
+});
+
+bookPages.addEventListener("input", () => {
+	if (bookPages.validity.rangeOverflow) {
+		bookPages.setCustomValidity("Book page is too long");
+	} else {
+		bookPages.setCustomValidity("");
+	}
+});
+
+bookYear.addEventListener("input", () => {
+	if (bookYear.validity.rangeUnderflow) {
+		bookYear.setCustomValidity("Book year cannot be negative");
+	} else {
+		bookYear.setCustomValidity("");
+	}
+});
 
 function populateBookmarkList(bookmarkList) {
 	// select the bookmark container and clear its contents
@@ -129,9 +157,6 @@ function populateBookmarkList(bookmarkList) {
 			});
 		}
 	});
-
-	// Log the Book objects array for developer testing
-	console.log(bookmarkList);
 }
 
 // Sanitize the string inputs to avoid XSS vulnerabilities
@@ -145,21 +170,23 @@ function sanitizeFormInputs(str) {
 }
 
 function addBooktoLibrary(e) {
+	e.preventDefault();
 	// Generate random unique ID and get the input values on the dialog form
-	const formElements = e.target;
 	const bookID = crypto.randomUUID();
-	const bookName = formElements.elements["bookName"].value;
-	const author = formElements.elements["bookAuthor"].value;
-	const pages = formElements.elements["bookPages"].value;
-	const year = formElements.elements["bookYear"].value;
-	const haveRead = formElements.elements["haveReadToggle"].checked;
 
 	// Update bookmarkList
-	bookmarkList.push(new Book(bookID, bookName, author, pages, year, haveRead));
+	bookmarkList.push(
+		new Book(
+			bookID,
+			bookName.value,
+			bookAuthor.value,
+			bookPages.value,
+			bookYear.value,
+			haveReadToggle.checked
+		)
+	);
 
 	// Populate the bookmarkListContainer and reset the form input values
 	populateBookmarkList(bookmarkList);
 	addBookForm.reset();
 }
-
-addBookForm.addEventListener("submit", (e) => addBooktoLibrary(e));

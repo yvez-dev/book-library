@@ -159,6 +159,18 @@ body {
 	transform: translateX(var(--height));
 }
 
+.validation-msg {
+	font-size: 1rem;
+	text-align: center;
+	padding: 0.5rem 0.25rem;
+}
+
+.invalid {
+	background-color: rgb(230, 95, 95);
+	color: #f0f0df;
+	font-weight: bold;
+}
+
 .delete-bookmark {
 	display: flex;
 	justify-content: center;
